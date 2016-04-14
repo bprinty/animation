@@ -52,7 +52,7 @@ class Wait(object):
         self._count = 0
         newlines = len(filter(lambda x: x == '\n', self._data[0]))
         reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
-        sys.stdout.write(''.join(['\n' + self.text] + ['\n']*(newlines - 1)))
+        sys.stdout.write(''.join(['\n' + self.text]))
         while True:
             if self._count < 0:
                 break
@@ -77,23 +77,26 @@ class Wait(object):
 
 # decorators
 # ----------
-def wait(animation, speed=0.2):
+def wait(animation='elipses', speed=0.2):
     """
     Decorator for ...
-
-    :param timing: When to update state (pre/post).
     """
     def decorator(func):
+        func.animation = animation
+        func.speed = speed
         @wraps(func)
         def wrapper(*args, **kwargs):
+            animation = func.animation
             text = ''
             if not hasattr(animations, animation):
                 text = animation
                 animation = 'elipses'
-            wait = Wait(animation=animation, text=text, speed=speed)
+            wait = Wait(animation=animation, text=text, speed=func.speed)
             wait.start()
-            ret = func(*args, **kwargs)
-            wait.stop()
+            try:
+                ret = func(*args, **kwargs)
+            finally:
+                wait.stop()
             return ret
         return wrapper
     return decorator
@@ -105,10 +108,12 @@ def simple_wait(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        wait = Wait(animation=animation, text=text)
+        wait = Wait()
         wait.start()
-        ret = func(*args, **kwargs)
-        wait.stop()
+        try:
+            ret = func(*args, **kwargs)
+        finally:
+            wait.stop()
         return ret
     return wrapper
 

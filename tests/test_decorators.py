@@ -10,24 +10,17 @@
 # imports
 # -------
 import unittest
-from animation import animation
+import animation
+import time
 
 
 # tests
 # -----
 class TestAnimation(unittest.TestCase):
 
-    def setUp(self):
+    @animation.simple_wait
+    def test_default(self):
+        time.sleep(5)
+        self.assertEqual(True, True)
         pass
 
-    def test_something(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-
-# exec
-# ----
-if __name__ == '__main__':
-    unittest.main()

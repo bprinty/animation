@@ -43,9 +43,8 @@ tag:
 docs:
 	cd docs && make html
 
-release: tag clean
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+release: tag test
+	python setup.py upload
 	VER=$(VERSION) && git push origin :$$VER
 	VER=$(VERSION) && git push origin $$VER
 

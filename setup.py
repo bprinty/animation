@@ -14,6 +14,8 @@ try:
 except ImportError:
     from distutils.core import setup
 
+import animation
+
 requirements = [
     # TODO: put package requirements here
 ]
@@ -33,7 +35,7 @@ with open('README.md') as readme_file:
 # ----
 setup(
     name='animation',
-    version='0.0.1',
+    version=animation.__version__,
     description="Tools for terminal-based await animations",
     long_description=readme,
     author="Blake Printy",
@@ -48,11 +50,10 @@ setup(
     install_requires=requirements,
     license="Apache-2.0",
     zip_safe=False,
-    keywords=['animation', 'wait', 'waiting']
+    keywords=['animation', 'wait', 'waiting', 'status'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: Apache-2.0 License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',
@@ -61,6 +62,5 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
-    test_suite='nosetests',
-    tests_require=test_requirements
+    test_suite='nose.collector'
 )

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 #
-# TODO: add description
-# 
+# Decorators for terminal-based wait animations
+#
 # @author <bprinty@gmail.com>
 # ------------------------------------------------
 
 
 # imports
 # -------
-import os
 import sys
 import threading
 import time
@@ -20,6 +19,8 @@ from . import animations
 # signal management
 # -----------------
 _waits = []
+
+
 def end_wait_threads(signal, frame):
     global _waits
     for wait in _waits:
@@ -45,7 +46,7 @@ class Wait(object):
             with custom animation.
         text (str): Optional text to print before animation.
         speed (float): Number of seconds each cycle of animation.
-    
+
     Examples:
         >>> animation = Wait()
         >>> animation.start()
@@ -68,7 +69,6 @@ class Wait(object):
         global _waits
         _waits.append(self)
         self._count = 0
-        newlines = len(filter(lambda x: x == '\n', self._data[0]))
         reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
         sys.stdout.write(''.join(['\n' + self.text]))
         while True:
@@ -110,7 +110,7 @@ def wait(animation='elipses', speed=0.2):
         animation (str, tuple): String reference to animation or tuple
             with custom animation.
         speed (float): Number of seconds each cycle of animation.
-    
+
     Examples:
         >>> @animation.wait('bar')
         >>> def long_running_function():
@@ -120,12 +120,13 @@ def wait(animation='elipses', speed=0.2):
     def decorator(func):
         func.animation = animation
         func.speed = speed
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             animation = func.animation
             text = ''
             if not isinstance(animation, (list, tuple)) and \
-                not hasattr(animations, animation):
+                    not hasattr(animations, animation):
                 text = animation
                 animation = 'elipses'
             wait = Wait(animation=animation, text=text, speed=func.speed)
@@ -160,4 +161,3 @@ def simple_wait(func):
             wait.stop()
         return ret
     return wrapper
-

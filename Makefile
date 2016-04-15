@@ -43,10 +43,10 @@ tag:
 docs:
 	cd docs && make html
 
-release: tag test
-	python setup.py upload
-	VER=$(VERSION) && git push origin :$$VER
+release: tag
+	VER=$(VERSION) && git push origin :$$VER || echo 'Remote tag available'
 	VER=$(VERSION) && git push origin $$VER
+	python setup.py upload
 
 build: clean
 	python setup.py sdist

@@ -2,12 +2,17 @@
 Installation
 ============
 
-At the command line::
+
+Through pip
+-----------
+::
 
     $ pip install animation
 
 
-Or, through GitHub::
+Via GitHub
+----------
+::
 
     $ git clone http://github.com/bprinty/animation.git
     $ cd animation

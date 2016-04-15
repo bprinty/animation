@@ -37,10 +37,28 @@ signal.signal(signal.SIGTERM, end_wait_threads)
 # animation objects
 # -----------------
 class Wait(object):
+    """
+    Class for managing wait animations.
+
+    Args:
+        animation (str, tuple): String reference to animation or tuple
+            with custom animation.
+        text (str): Optional text to print before animation.
+        speed (float): Number of seconds each cycle of animation.
+    
+    Examples:
+        >>> animation = Wait()
+        >>> animation.start()
+        >>> long_running_function()
+        >>> animation.stop()
+    """
 
     def __init__(self, animation='elipses', text='waiting', speed=0.2):
-        assert hasattr(animations, animation), 'Animation not supported!'
-        self._data = getattr(animations, animation)
+        if isinstance(animation, (list, tuple)):
+            self._data = animation
+        else:
+            self._data = getattr(animations, animation)
+        assert len(self._data) > 0, 'Incorrect animation specified!'
         self.animation = animation
         self.text = text
         self.speed = speed
@@ -65,11 +83,17 @@ class Wait(object):
         return
 
     def start(self):
+        """
+        Start animation thread.
+        """
         self.thread = threading.Thread(target=self._animate)
         self.thread.start()
         return
 
     def stop(self):
+        """
+        Stop animation thread.
+        """
         time.sleep(self.speed)
         self._count = -9999
         return
@@ -79,7 +103,19 @@ class Wait(object):
 # ----------
 def wait(animation='elipses', speed=0.2):
     """
-    Decorator for ...
+    Decorator for adding wait animation to long running
+    functions.
+
+    Args:
+        animation (str, tuple): String reference to animation or tuple
+            with custom animation.
+        speed (float): Number of seconds each cycle of animation.
+    
+    Examples:
+        >>> @animation.wait('bar')
+        >>> def long_running_function():
+        >>>     ... 5 seconds later ...
+        >>>     return
     """
     def decorator(func):
         func.animation = animation
@@ -88,7 +124,8 @@ def wait(animation='elipses', speed=0.2):
         def wrapper(*args, **kwargs):
             animation = func.animation
             text = ''
-            if not hasattr(animations, animation):
+            if not isinstance(animation, (list, tuple)) and \
+                not hasattr(animations, animation):
                 text = animation
                 animation = 'elipses'
             wait = Wait(animation=animation, text=text, speed=func.speed)
@@ -104,7 +141,14 @@ def wait(animation='elipses', speed=0.2):
 
 def simple_wait(func):
     """
-    Decorator for ...
+    Decorator for adding simple text wait animation to
+    long running functions.
+
+    Examples:
+        >>> @animation.simple_wait
+        >>> def long_running_function():
+        >>>     ... 5 seconds later ...
+        >>>     return
     """
     @wraps(func)
     def wrapper(*args, **kwargs):

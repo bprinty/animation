@@ -17,7 +17,7 @@ import time
 # tests
 # -----
 class TestAnimation(unittest.TestCase):
-    _wait = 3
+    _wait = 2
 
     @animation.simple_wait
     def test_default(self):
@@ -60,3 +60,9 @@ class TestAnimation(unittest.TestCase):
         time.sleep(self._wait)
         self.assertEqual(True, True)
         pass
+
+    @animation.wait(('-', '/', '|', '\\'))
+    def test_custom_animation(self):
+        time.sleep(self._wait)
+        self.assertEqual(True, True)
+        return

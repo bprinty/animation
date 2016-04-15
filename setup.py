@@ -53,7 +53,7 @@ setup(
     keywords=['animation', 'wait', 'waiting', 'status'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache-2.0 License',
+        'License :: OSI Approved :: Apple Public Source License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',

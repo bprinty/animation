@@ -14,6 +14,12 @@ python setup.py install
 ```
 
 
+Documentation
+-------------
+
+Documentation for the package can be found at [Read The Docs](http://animation.readthedocs.org/).
+
+
 Usage
 -----
 

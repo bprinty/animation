@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # definitions for cyclic animations
-# 
+#
 # @author <bprinty@gmail.com>
 # ------------------------------------------------
 

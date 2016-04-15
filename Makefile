@@ -46,7 +46,8 @@ docs:
 release: tag
 	VER=$(VERSION) && git push origin :$$VER || echo 'Remote tag available'
 	VER=$(VERSION) && git push origin $$VER
-	python setup.py upload
+	python setup.py sdist upload -r pypitest
+	python setup.py sdist upload -r pypi
 
 build: clean
 	python setup.py sdist

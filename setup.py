@@ -16,12 +16,12 @@ except ImportError:
 
 import animation
 
-requirements = [
-    # TODO: put package requirements here
-]
+with open('requirements.txt', 'r') as reqs:
+    requirements = map(lambda x: x.rstrip(), reqs.readlines())
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'nose',
+    'nose-parameterized'
 ]
 
 
@@ -41,11 +41,8 @@ setup(
     author="Blake Printy",
     author_email='bprinty@gmail.com',
     url='https://github.com/bprinty/animation',
-    packages=[
-        'animation',
-    ],
-    package_dir={'animation':
-                 'animation'},
+    packages=['animation'],
+    package_dir={'animation': 'animation'},
     include_package_data=True,
     install_requires=requirements,
     license="Apache-2.0",

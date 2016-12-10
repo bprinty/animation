@@ -135,6 +135,7 @@ def wait(animation='elipses', speed=0.2):
                 ret = func(*args, **kwargs)
             finally:
                 wait.stop()
+            sys.stdout.write('\n')
             return ret
         return wrapper
     return decorator
@@ -159,5 +160,6 @@ def simple_wait(func):
             ret = func(*args, **kwargs)
         finally:
             wait.stop()
+        sys.stdout.write('\n')
         return ret
     return wrapper

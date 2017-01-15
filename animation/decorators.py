@@ -63,19 +63,20 @@ class Wait(object):
         self.animation = animation
         self.text = text
         self.speed = speed
+        self.reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
         return
 
     def _animate(self):
         global _waits
         _waits.append(self)
         self._count = 0
-        reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
+        
         sys.stdout.write(''.join(['\n' + self.text]))
         while True:
             if self._count < 0:
                 break
             if self._count != 0:
-                sys.stdout.write(reverser)
+                sys.stdout.write(self.reverser)
             sys.stdout.write(self._data[self._count % len(self._data)])
             sys.stdout.flush()
             time.sleep(self.speed)
@@ -96,6 +97,8 @@ class Wait(object):
         """
         time.sleep(self.speed)
         self._count = -9999
+        sys.stdout.write(self.reverser + '\r\033[K\033[A')
+        sys.stdout.flush()
         return
 
 

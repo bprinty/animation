@@ -43,16 +43,15 @@ tag:
 docs:
 	cd docs && make html
 
-release: tag
-	VER=$(VERSION) && git push origin :$$VER || echo 'Remote tag available'
-	VER=$(VERSION) && git push origin $$VER
-	python setup.py sdist upload -r pypitest
-	python setup.py sdist upload -r pypi
-
 build: clean
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
+
+release: build tag
+	VER=$(VERSION) && git push origin :$$VER || echo 'Remote tag available'
+	VER=$(VERSION) && git push origin $$VER
+	twine upload --skip-existing dist/*
 
 install: clean
 	python setup.py install

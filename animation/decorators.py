@@ -71,7 +71,7 @@ class Wait(object):
         _waits.append(self)
         self._count = 0
         
-        sys.stdout.write(''.join(['\n' + self.text]))
+        sys.stdout.write(self.text)
         while True:
             if self._count < 0:
                 break

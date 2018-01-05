@@ -104,7 +104,7 @@ class Wait(object):
 
 # decorators
 # ----------
-def wait(animation='elipses', speed=0.2):
+def wait(animation='elipses', text='', speed=0.2):
     """
     Decorator for adding wait animation to long running
     functions.
@@ -123,14 +123,15 @@ def wait(animation='elipses', speed=0.2):
     def decorator(func):
         func.animation = animation
         func.speed = speed
+        func.text = text
 
         @wraps(func)
         def wrapper(*args, **kwargs):
             animation = func.animation
-            text = ''
+            text = func.text
             if not isinstance(animation, (list, tuple)) and \
                     not hasattr(animations, animation):
-                text = animation
+                text = animation if text == '' else text
                 animation = 'elipses'
             wait = Wait(animation=animation, text=text, speed=func.speed)
             wait.start()

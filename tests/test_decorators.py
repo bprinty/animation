@@ -49,6 +49,12 @@ class TestAnimation(unittest.TestCase):
         self.assertEqual(True, True)
         pass
 
+    @animation.wait('pulse')
+    def test_pulse(self):
+        time.sleep(self._wait)
+        self.assertEqual(True, True)
+        pass
+
     @animation.wait('custom wait')
     def test_text_resolution(self):
         time.sleep(self._wait)

@@ -131,7 +131,7 @@ def wait(animation='elipses', text='', speed=0.2):
             text = func.text
             if not isinstance(animation, (list, tuple)) and \
                     not hasattr(animations, animation):
-                text = animation
+                text = animation if text == '' else text
                 animation = 'elipses'
             wait = Wait(animation=animation, text=text, speed=func.speed)
             wait.start()

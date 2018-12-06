@@ -7,7 +7,7 @@
 
 # config
 # ------
-VERSION    = `python -c 'import animation; print animation.__version__'`
+VERSION    = `python -c 'import animation; print(animation.__version__)'`
 
 
 # targets

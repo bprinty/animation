@@ -28,11 +28,9 @@ def end_wait_threads(signal, frame):
     sys.stdout.write('\n')
     return
 
-signal.signal(signal.SIGINT, end_wait_threads)
-signal.signal(signal.SIGINT, end_wait_threads)
-signal.signal(signal.SIGUSR1, end_wait_threads)
-signal.signal(signal.SIGUSR2, end_wait_threads)
-signal.signal(signal.SIGTERM, end_wait_threads)
+for sig in ['SIGINT', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'SIGTERM']:
+    if hasattr(signal, sig):
+        signal.signal(getattr(signal, sig), end_wait_threads)
 
 
 # animation objects

@@ -57,12 +57,16 @@ class Wait(object):
             self._data = animation
         else:
             self._data = getattr(animations, animation)
+            if animation == "dots":
+                text = text + '\n'
+            else:
+                text = text + "\t"
         assert len(self._data) > 0, 'Incorrect animation specified!'
         self.animation = animation
         self.text = text
         self.speed = speed
+        self.is_dots = animation == "dots"
         self.reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
-        return
 
     def _animate(self):
         global _waits
@@ -96,6 +100,8 @@ class Wait(object):
         time.sleep(self.speed)
         self._count = -9999
         sys.stdout.write(self.reverser + '\r\033[K')
+        if self.is_dots:
+            sys.stdout.write('\033[A\r\033[K')
         sys.stdout.flush()
         return
 

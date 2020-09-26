@@ -65,7 +65,7 @@ class Wait(object):
         self.animation = animation
         self.text = text
         self.speed = speed
-        self.isDots = animation == "dots"
+        self.is_dots = animation == "dots"
         self.reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
 
     def _animate(self):
@@ -100,7 +100,7 @@ class Wait(object):
         time.sleep(self.speed)
         self._count = -9999
         sys.stdout.write(self.reverser + '\r\033[K')
-        if self.isDots:
+        if self.is_dots:
             sys.stdout.write('\033[A\r\033[K')
         sys.stdout.flush()
         return

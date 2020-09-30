@@ -13,6 +13,7 @@ import threading
 import time
 import signal
 from functools import wraps
+
 from . import animations
 
 
@@ -28,9 +29,8 @@ def end_wait_threads(signal, frame):
     sys.stdout.write('\n')
     return
 
-for sig in ['SIGINT', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'SIGTERM']:
-    if hasattr(signal, sig):
-        signal.signal(getattr(signal, sig), end_wait_threads)
+for sig in (signal.SIGINT, signal.SIGUSR1, signal.SIGUSR2, signal.SIGTERM):
+    signal.signal(sig, end_wait_threads)
 
 
 # animation objects
@@ -74,9 +74,7 @@ class Wait(object):
         self._count = 0
 
         sys.stdout.write(self.text)
-        while True:
-            if self._count < 0:
-                break
+        while self._count >= 0:
             if self._count != 0:
                 sys.stdout.write(self.reverser)
             sys.stdout.write(self._data[self._count % len(self._data)])
@@ -86,17 +84,13 @@ class Wait(object):
         return
 
     def start(self):
-        """
-        Start animation thread.
-        """
+        """Start animation thread."""
         self.thread = threading.Thread(target=self._animate)
         self.thread.start()
         return
 
     def stop(self):
-        """
-        Stop animation thread.
-        """
+        """Stop animation thread."""
         time.sleep(self.speed)
         self._count = -9999
         sys.stdout.write(self.reverser + '\r\033[K')

@@ -86,6 +86,7 @@ class Wait(object):
     def start(self):
         """Start animation thread."""
         self.thread = threading.Thread(target=self._animate)
+        self.daemon = True
         self.thread.start()
         return
 

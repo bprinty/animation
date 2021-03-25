@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # testing for animation
-# 
-# @author <bprinty@gmail.com>
+#
 # ------------------------------------------------
 
 
@@ -51,6 +50,18 @@ class TestAnimation(unittest.TestCase):
 
     @animation.wait('pulse')
     def test_pulse(self):
+        time.sleep(self._wait)
+        self.assertEqual(True, True)
+        pass
+
+    @animation.wait('bar', color='blue')
+    def test_color_bar(self):
+        time.sleep(self._wait)
+        self.assertEqual(True, True)
+        pass
+
+    @animation.wait('dots', color='magenta')
+    def test_color_dots(self):
         time.sleep(self._wait)
         self.assertEqual(True, True)
         pass

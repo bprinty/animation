@@ -2,7 +2,6 @@
 #
 # Decorators for terminal-based wait animations
 #
-# @author <bprinty@gmail.com>
 # ------------------------------------------------
 
 
@@ -13,6 +12,7 @@ import threading
 import time
 import signal
 from functools import wraps
+
 from . import animations
 
 
@@ -44,6 +44,7 @@ class Wait(object):
             with custom animation.
         text (str): Optional text to print before animation.
         speed (float): Number of seconds each cycle of animation.
+        color (str): Color to use for animation.
 
     Examples:
         >>> animation = Wait()
@@ -52,7 +53,7 @@ class Wait(object):
         >>> animation.stop()
     """
 
-    def __init__(self, animation='elipses', text='waiting', speed=0.2):
+    def __init__(self, animation='elipses', text='waiting', speed=0.2, color=None):
         if isinstance(animation, (list, tuple)):
             self._data = animation
         else:
@@ -65,6 +66,13 @@ class Wait(object):
         self.animation = animation
         self.text = text
         self.speed = speed
+        if color is not None:
+            import chalk
+            if not hasattr(chalk, color):
+                raise AssertionError('Color {} not supported. Please specify primary color supported by pychalk.'.format(color))
+            self.color = getattr(chalk, color)
+        else:
+            self.color = lambda x: x
         self.is_dots = animation == "dots"
         self.reverser = ''.join(map(lambda x: '\b' if x != '\n' else '\033[A', self._data[0]))
 
@@ -73,13 +81,14 @@ class Wait(object):
         _waits.append(self)
         self._count = 0
 
-        sys.stdout.write(self.text)
+        sys.stdout.write(self.color(self.text))
         while True:
             if self._count < 0:
                 break
             if self._count != 0:
                 sys.stdout.write(self.reverser)
-            sys.stdout.write(self._data[self._count % len(self._data)])
+
+            sys.stdout.write(self.color(self._data[self._count % len(self._data)]))
             sys.stdout.flush()
             time.sleep(self.speed)
             self._count += 1
@@ -90,6 +99,7 @@ class Wait(object):
         Start animation thread.
         """
         self.thread = threading.Thread(target=self._animate)
+        self.daemon = True
         self.thread.start()
         return
 
@@ -108,7 +118,7 @@ class Wait(object):
 
 # decorators
 # ----------
-def wait(animation='elipses', text='', speed=0.2):
+def wait(animation='elipses', text='', speed=0.2, color=None):
     """
     Decorator for adding wait animation to long running
     functions.
@@ -128,6 +138,7 @@ def wait(animation='elipses', text='', speed=0.2):
         func.animation = animation
         func.speed = speed
         func.text = text
+        func.color = color
 
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -137,7 +148,7 @@ def wait(animation='elipses', text='', speed=0.2):
                     not hasattr(animations, animation):
                 text = animation if text == '' else text
                 animation = 'elipses'
-            wait = Wait(animation=animation, text=text, speed=func.speed)
+            wait = Wait(animation=animation, text=text, speed=func.speed, color=color)
             wait.start()
             try:
                 ret = func(*args, **kwargs)

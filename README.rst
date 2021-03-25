@@ -42,7 +42,7 @@ Here is an example of how to use it in a project:
 This will print an animated waiting message like this (the elipses at the end of the text grow and shrink while the function executes):
 
 .. code-block:: bash
-    
+
     waiting ...
 
 
@@ -92,6 +92,18 @@ If you want to manually start and stop the wait animation, you can use the ```an
     wait.start()
     long_running_function()
     wait.stop()
+
+
+Finally, you can change the color of animations with the ```color=``` argument:
+
+.. code-block:: python
+
+    import animation
+
+    @animation.wait('bar', color='blue')
+    def long_running_function():
+        ... 5 seconds later ...
+        return
 
 
 Questions/Feedback

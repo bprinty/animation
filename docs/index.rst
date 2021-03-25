@@ -1,8 +1,8 @@
 .. animation documentation master file
 
 
-Welcome to animation's documentation!
-======================================
+```animation``` - decorators for terminal-based animations
+======================================================
 
 
 Content:
@@ -22,4 +22,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

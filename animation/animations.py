@@ -3,7 +3,6 @@
 #
 # definitions for cyclic animations
 #
-# @author <bprinty@gmail.com>
 # ------------------------------------------------
 
 

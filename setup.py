@@ -1,32 +1,47 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# package setup
-# 
-# @author <bprinty@gmail.com>
+# Package setup
+#
 # ------------------------------------------------
+
+
+# imports
+# -------
+import re
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from distutils.core import setup, find_packages
 
 
 # config
 # ------
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+class Config:
+    def __init__(self, fi):
+        with open(fi) as meta:
+            for m in re.findall(r'(__[a-z]+__).*=.*[\'"](.+)[\'"]', meta.read()):
+                setattr(self, m[0], m[1])
+        return
 
-import animation
 
+config = Config('animation/__init__.py')
+
+
+# requirements
+# ------------
 with open('requirements.txt', 'r') as reqs:
-    requirements = map(lambda x: x.rstrip(), reqs.readlines())
+    requirements = list(map(lambda x: x.rstrip(), reqs.readlines()))
 
 test_requirements = [
-    'nose',
-    'nose-parameterized'
+    'pytest',
+    'pytest-cov',
+    'pytest-runner'
 ]
 
 
-# files
-# -----
+# readme
+# ------
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
@@ -34,18 +49,17 @@ with open('README.rst') as readme_file:
 # exec
 # ----
 setup(
-    name='animation',
-    version=animation.__version__,
-    description="Tools for terminal-based await animations",
+    name=config.__pkg__,
+    version=config.__version__,
+    description=config.__info__,
     long_description=readme,
-    author="Blake Printy",
-    author_email='bprinty@gmail.com',
-    url='https://github.com/bprinty/animation',
-    packages=['animation'],
-    package_dir={'animation': 'animation'},
+    author=config.__author__,
+    author_email=config.__email__,
+    url=config.__url__,
+    packages=find_packages(exclude=['docs', 'tests']),
     include_package_data=True,
     install_requires=requirements,
-    license="Apache-2.0",
+    license="MIT",
     zip_safe=False,
     keywords=['animation', 'wait', 'waiting', 'status'],
     classifiers=[
@@ -58,6 +72,9 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
-    test_suite='nose.collector'
+    tests_require=test_requirements
 )

@@ -60,6 +60,12 @@ class TestAnimation(unittest.TestCase):
         self.assertEqual(True, True)
         pass
 
+    @animation.wait('fullbar')
+    def test_fullbar(self):
+        time.sleep(self._wait)
+        self.assertEqual(True, True)
+        pass
+    
     @animation.wait('dots', color='magenta')
     def test_color_dots(self):
         time.sleep(self._wait)
